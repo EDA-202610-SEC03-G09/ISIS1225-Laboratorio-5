@@ -115,7 +115,7 @@ Este programa se distribuye con la esperanza de que sea útil, pero SIN NINGUNA 
 - [Dario Correal][dariocorreal-url] es el autor original y desarrollador principal de la librería.
 - [Santiago Arteaga][phillipus85-url] es colaborador y administrador de repositorios.
 - [Luis Florez][le99-url] es colaborador y desarrolló los ejemplos y tutoriales para la librería.
-- [Lina Ojeda][lojedaa-url] es colaborador y desarrolló la última versión de la actividad.
+- [Lina Ojeda][lojedaa-url] is a collaborator and developed the latest version of the activity.
 
 [Volver al inicio](#laboratorio-5)
 

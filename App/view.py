@@ -84,7 +84,7 @@ def select_data_structure():
         elif sub_input == "2":
             data_structure = lt
             print("Has elegido Single_linked_list")
-            return sub_input
+            return input
         else:
             print("Opción no válida en el submenú")
             sub_input = ""

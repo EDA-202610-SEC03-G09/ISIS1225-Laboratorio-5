@@ -30,6 +30,8 @@ import os
 import time
 from DataStructures.List import array_list as al
 from DataStructures.List import single_linked_list as lt
+from DataStructures.Queue import queue as q  
+from DataStructures.Stack import stack as st
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/GoodReads'
 
@@ -59,7 +61,7 @@ def new_logic(user_data_structure):
                "tags": None,
                "book_tags": None}
 
-    # Usamos la estructura seleccionada para inicializar todas las listas
+    
     catalog["books"] = data_structure.new_list()
     catalog["authors"] = data_structure.new_list()
     catalog["tags"] = data_structure.new_list() 
@@ -111,7 +113,7 @@ def load_books_tags(catalog):
     """
     Carga la información que asocia tags con libros.
     """
-    bookstagsfile = data_dir + 'GoodReads/book_tags.csv'
+    bookstagsfile = data_dir + '/book_tags.csv'  
     input_file = csv.DictReader(open(bookstagsfile, encoding='utf-8'))
     for booktag in input_file:
         add_book_tag(catalog, booktag)
@@ -183,21 +185,30 @@ def select_sort_algorithm(algo_opt):
     if algo_opt == 1:
         sort_algorithm = 1
         algo_msg = "Seleccionó la configuración - Selection Sort"
-    elif algo_opt==2:
-        sort_algorithm = 2
-        algo_msg = "Seleccionó la configuracion - Insertion Sort"
-    elif algo_opt==3:
+    
+    # opcion 1: Insertion Sort
+    elif algo_opt == 2:
+        sort_algorithm = 2 
+        algo_msg = "Seleccionó la configuración - Insertion Sort"
+
+    # opcion 2: Shell Sort
+    elif algo_opt == 3:
         sort_algorithm = 3
-        algo_msg = "Seleccionó la configuracion - Shell Sort"
-    elif algo_opt==4:
-        sort_algorithm = 4
-        algo_msg = "Seleccionó la configuracion - Merge Sort"
-    elif algo_opt==5:
-        sort_algorithm = 5
-        algo_msg = "Seleccionó laa configuracion - Quick Sort"
+        algo_msg = "Seleccionó la configuración - Shell Sort"
+    
+    # opcion 2: Merge Sort
+    elif algo_opt == 4:
+        sort_algorithm = 4 
+        algo_msg = "Seleccionó la configuración - Merge Sort"
+
+    # opcion 2: Quick Sort
+    elif algo_opt == 5:    
+        sort_algorithm = 5 
+        algo_msg = "Seleccionó la configuración - Quick Sort"
+
     else:
         algo_msg = "No seleccionó una configuración válida"
-
+    
     # respuesta final: algoritmo de ordenamiento y texto de configuracion
     return sort_algorithm, algo_msg
 
@@ -268,22 +279,22 @@ def count_books_by_tag(catalog, tag_name):
     return 0
 
 #  -------------------------------------------------------------
-# Funciones utilizadas para obtener el tamaño de las listas
-#  -------------------------------------------------------------
-
+# Funciones utilizadas para obtener el tamaño de las listas#  -------------------------------------------------------------
 
 
 def book_size(catalog):
+ 
     return data_structure.size(catalog["books"])
 
 
 def author_size(catalog):
+ 
     return data_structure.size(catalog["authors"])
 
 
 def tag_size(catalog):
-    return data_structure.size(catalog["book_tags"])
-
+  
+    return data_structure.size(catalog["tags"])
 
 def book_tag_size(catalog):
     return data_structure.size(catalog["book_tags"])
@@ -323,7 +334,9 @@ def compare_book_ids(id, book):
 
 
 def eval_ratings(book1, book2):
-    return (float(book1["average_rating"]) > float(book2["average_rating"]))
+    
+    return float(book1["average_rating"]) < float(book2["average_rating"])
+        
 
 #  -----------------------------------------------
 # Funciones de ordenamiento
@@ -331,31 +344,34 @@ def eval_ratings(book1, book2):
 
 
 def sort_books(catalog):
-
-    sorted_books = catalog["book_sublist"]
+    
+    sorted_books = None
+    
+    if "book_sublist" in catalog:
+        sorted_books = catalog["book_sublist"]
+    else:
+        sorted_books = catalog["books"]
+    
+    
     start_time = get_time()
 
-    # TODO: completar las opciones para selection_sort, insertion_sort, shell_sort, merge_sort y quick_sort
+
 
     if sort_algorithm == 1:
-        sorted_books_s = None  # TODO: completar la llamada a selection_sort
-        pass
+    
+        sorted_books_s = data_structure.selection_sort(sorted_books,eval_ratings)
 
     elif sort_algorithm == 2:
-        # TODO: completar la llamada a insertion_sort
-        pass
+        sorted_books_s = data_structure.insertion_sort(sorted_books,eval_ratings)
 
     elif sort_algorithm == 3:
-        # TODO: completar la llamada a shell_sort
-        pass
+        sorted_books_s = data_structure.shell_sort(sorted_books,eval_ratings)
 
     elif sort_algorithm == 4:
-        # TODO: completar la llamada a merge_sort
-        pass
+        sorted_books_s = data_structure.merge_sort(sorted_books,eval_ratings)
 
     elif sort_algorithm == 5:
-        # TODO: completar la llamada a quick_sort
-        pass
+        sorted_books_s = data_structure.quick_sort(sorted_books,eval_ratings)
 
     end_time = get_time()
     delta = delta_time(start_time, end_time)

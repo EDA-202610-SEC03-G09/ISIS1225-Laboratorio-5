@@ -1,238 +1,426 @@
-from DataStructures.List import list_node as ln
-from DataStructures.Utils import error
-
 def new_list():
-    new_list={"size" : 0,
-              "first" : None,
-              "last" : None
-              }
-    return new_list
+    newlist = {
+        "first" : None,
+        "last" : None,
+        "size" : 0,
+    }
+    
+    return newlist
 
 def get_element(my_list, pos):
-    searchpos=0
-    node=my_list["first"]
-    while searchpos<pos:
-        node=node["next"]
-        searchpos+=1
+    searchpos = 0
+    node = my_list["first"]
+    while searchpos < pos:
+        node = node["next"]
+        searchpos +=1
     return node["info"]
 
-def add_last(my_list, element):
-    nodo = ln.new_single_node(element)
-    if my_list['last'] == None:
-        my_list['first'] = nodo 
-        my_list['last'] = nodo 
-    else:
-        my_list['last']['next'] = nodo 
-        my_list['last'] = nodo 
-
-    my_list['size'] += 1
-
-    return my_list
+def is_present(my_list, element, cmp_function):
+    is_in_array = False
+    temp = my_list["first"]
+    count = 0
+    while not is_in_array and temp is not None:
+        if cmp_function(element, temp["info"]) == 0:
+            is_in_array = True
+        else:
+            temp = temp["next"]
+            count +=1
     
+    if not is_in_array:
+        count = -1
+    return count
+    
+def add_first(my_list, element):
+    nuevo = {
+        "info": element,
+        "next": my_list["first"]
+    }
+    
+    if my_list["size"] == 0:
+        my_list["first"] = nuevo
+        my_list["last"] = nuevo
+    else:
+        my_list["first"] = nuevo
+        
+    my_list["size"] += 1
+    
+    return my_list
+
+def add_last(my_list, element):
+    nuevo = {
+        "info": element,
+        "next": None
+    }
+    
+    if my_list["size"] == 0:
+        my_list["first"] = nuevo
+        my_list["last"] = nuevo
+    else:
+        my_list["last"]["next"] = nuevo
+        my_list["last"] = nuevo
+    
+    my_list["size"] +=1
+    
+    return my_list
 
 def size(my_list):
-    tamaño=my_list["size"]
-    return tamaño
+    return my_list["size"]
 
-def is_present(my_list, pos,cmp_function):
-    size = my_list['size']
-    if size > 0:
-        keyexist = False
-        element = my_list["first"]
-        for i in range (0,size):
-            if (cmp_function(pos, element["info"]) == 0):
-                keyexist = True
-                break
-            element=element["next"]
-        if keyexist:
-            return i
-    return -1
-
-def add_first(my_list, element):
-    new_node = {'info': element, 'next': None}
-    if my_list['first'] is None:
-        my_list['first'] = new_node
-        my_list['last'] = new_node
-    else:
-        new_node['next'] = my_list['first']
-        my_list['first'] = new_node
-    my_list['size'] += 1
-    return my_list
-
-def is_empty(newlist):
-    if newlist["size"]==0:
-        return True
-    return False
-
-def first_element(newlist):
-    if newlist["size"]==0:
-        return -1
-    return newlist["first"]["info"]
-
-def last_element(newlist):
-    if newlist["size"]==0:
-        return -1
-    return newlist["last"]["info"]
-
-def remove_first(newlist):
-    if newlist['first'] is not None:
-        temp=newlist['first']['next']
-        node=newlist['first']
-        newlist['first']=temp
-        newlist['size']-=1
-        if (newlist['size']==0):
-            newlist['last']=newlist['first']
-            return node['info']
-        else:
-            return None
-
-def remove_last(newlist):
-    try:
-        if newlist['size']>0:
-            if newlist['first']==newlist['last']:
-                node=newlist['first']
-                newlist['last']=None
-                newlist['first']=None
-            else:
-                temp=newlist['first']
-                while temp['next']!=newlist['last']:
-                    temp=temp['next']
-                node=newlist['last']
-                newlist['last']=temp
-                newlist['last']['next']=None
-            newlist['size'] -= 1
-            return node['info']
-        else:
-            return None
-    except Exception as exp:
-        error.reraise(exp, 'singlelinkedlist->remoLast: ')
-
-def insert_element(newlist, element, pos):
-    new_node = ln.new_single_node(element)
-    if (newlist['size']==0):
-        newlist['first']=new_node
-        newlist['last']=new_node
-    elif ((newlist['size']>0) and (pos==0)):
-        new_node['next']=newlist['first']
-        newlist['first']=new_node
-    else:
-        cont=1
-        temp=newlist['first']
-        while cont<pos:
-            temp=temp['next']
-            cont+=1
-        new_node['next']=temp['next']
-        temp['next']=new_node
-
-        if (pos==newlist['size']):
-            newlist['last']=new_node
-    newlist['size']+=1
-    return newlist
-
-def delete_element(newlist, pos):
-    if (newlist['size']>0):
-        if (pos==0):
-            newlist['first']=newlist['first']['next']
-            newlist['size']-=1
-        elif (pos>1):
-            temp=newlist['first']
-            searchpos=1
-            while searchpos<pos:
-                temp=temp['next']
-                searchpos+=1
-                temp['next']=temp['next']['next']
-                if (pos==newlist['size']-1):
-                    newlist['last']=temp
-                newlist['size']-=1
-        return newlist
-
-def change_info(newlist, pos, new_info):
-    current=newlist['first']
-    cont=0
-    while cont<pos:
-        current=current['next']
-        cont+=1
-        current['info']=new_info
-    return newlist
-    
-def exchange(newlist, pos1, pos2):
-    if pos1==pos2:
-        return newlist
-    else:
-        element_1 = get_element(newlist, pos1)
-        element_2 = get_element(newlist, pos2)
-        change_info(newlist, pos1, element_2)
-        change_info(newlist, pos2, element_1)
-
-def sub_list(newlist, pos, num_elem):
-    i=0
-    posicion=0
-    info=newlist["first"]
-    sublist=new_list()
-    if newlist["size"]==0:
+def first_element(my_list):
+    if my_list["size"] == 0:
         return None
-    if pos==0 and num_elem <= newlist["size"]:
-        while i != num_elem:
-            add_last(sublist, info)
-            info = info["next"]
-            i += 1 
-        return sublist
-    elif pos <= newlist["size"] and (pos + num_elem) <= newlist["size"]:
-        while posicion != pos:
-            info = info["next"]
-            posicion += 1 
-        while i != num_elem:
-            add_last(sublist, info)
-            info = info["next"]
-            i += 1 
-        return sublist
     
-def merge_sort(my_list, sort_crit):
-    size = size(my_list)
-    if size == 1:
-        return my_list
-    else:
-        mitad = size // 2
-        leftlist = sub_list(my_list, 1, mitad)
-        rightlist = sub_list(my_list, mitad + 1, size - mitad)
-        merge_sort(leftlist, sort_crit)
-        merge_sort(rightlist, sort_crit)
-        merge(my_list, leftlist, rightlist, sort_crit)
+    return my_list["first"]["info"]
 
-def merge(my_list, leftlist, rightlist, sort_crit):
-    i=1
-    j=1
-    k=1
-    leftelements = size(leftlist)
-    rightelements = size(rightlist)
-    while (i <= leftelements) and (j <= rightelements):
-        elemi = get_element(leftlist, i)
-        elemj = get_element(rightlist, j)
-        if sort_crit(elemi, elemj):
-            change_info(my_list, k, elemi)
-            i += 1
-        else: 
-            change_info(my_list, k, elemj)
-            j += 1
-        k += 1
-    while i <= leftelements:
-        change_info(my_list, k, get_element(leftlist, i))
-        i += 1
-        k += 1
-    while j <= rightelements:
-        change_info(my_list, k, get_element(rightlist, j))
-        j += 1
-        k += 1
+def is_empty(my_list):
+    if my_list["size"] == 0:
+        return True
+    else:
+        return False
+
+def last_element(my_list):
+    if is_empty(my_list):
+        raise Exception('IndexError: list index out of range')
+    else:
+        return my_list["last"]["info"]
+    
+def remove_first(my_list):
+    
+    if is_empty(my_list):
+        raise Exception('IndexError: list index out of range')
+    
+    e_nodo = my_list["first"]["info"]
+    
+    if my_list["size"] == 1:
+        my_list["first"] = None
+        my_list["last"] = None
+        
+    
+    if my_list["size"] > 1:
+        my_list["first"] = my_list["first"]["next"]
+        
+    my_list["size"] -=1
+    
+    return e_nodo
+    
+def remove_last(my_list):
+    
+    if is_empty(my_list):
+        raise Exception('IndexError: list index out of range')
+    
+    e_nodo = my_list["last"]["info"]
+    
+    if my_list["size"] == 1:
+        my_list["first"] = None
+        my_list["last"] = None
+    else:
+        nodo = my_list["first"]
+        while nodo["next"] != my_list["last"]: #busca la referencia que apunte al ultimo nodo
+            nodo = nodo["next"]
+        nodo["next"] = None  # el penultimo se vuelve el nuevo ultimo
+        my_list["last"] = nodo # y lo mencionamos en el diccionario
+    
+    my_list["size"] -=1
+    
+    return e_nodo
+
+def insert_element(my_list,element,pos):
+    if pos < 0 or pos > size(my_list):
+        raise Exception('IndexError: list index out of range')
+    
+    n_n = {"info":element,"next":None}
+
+    if pos == 0:
+        return add_first(my_list,element)
+    
+    elif pos == (my_list["size"] - 1):
+        return add_last(my_list,element)
+    
+    else:
+        buscador = my_list["first"]
+        i = 0
+        
+        while i < pos - 1:
+            buscador = buscador["next"]
+            i +=1
+        
+        n_n["next"] = buscador["next"]
+        buscador["next"] = n_n
+        
+        my_list["size"] +=1
+    
+    return my_list
+        
+def delete_element(my_list,pos):
+    if pos < 0 or pos > size(my_list):
+        raise Exception('IndexError: list index out of range')
+    
+    if pos == 0:
+        my_list["first"]["info"] == None
+    
+    elif pos == my_list["size"] - 1:
+        my_list["last"]["info"] = None
+    
+    else:
+        buscador = my_list[next]
+        i = 0
+        while i < pos :
+            buscador = buscador["next"]
+            i +=1
+            
+        buscador["info"] = None
+    
+    return my_list
+    
+def change_info(my_list,pos, new_info):
+    
+    if pos < 0 or pos >= my_list["size"]:
+        return None
+    
+    
+    i = 0
+    buscador = my_list["first"]
+        
+    while i < pos:
+        buscador = buscador["next"]
+        i +=1
+            
+    buscador["info"] = new_info
     return my_list
 
-def quick_sort(my_list, cmp_function):
+def exchange(my_list,pos_1,pos_2):
     
-    if len(my_list) <= 1:
+    if pos_1 < 0 or pos_1 >= my_list["size"]:
+        return None
+    if pos_2 < 0 or pos_2 >= my_list["size"]:
+        return None
+    
+    buscador_1 = my_list["first"]
+    i_1 = 0
+    while i_1 < pos_1:
+        buscador_1 = buscador_1["next"]
+        i_1 +=1
+    info_a = buscador_1["info"]
+        
+        
+        
+    buscador_2 = my_list["first"]
+    i_2 = 0
+    while i_2 < pos_2:
+        buscador_2 = buscador_2["next"]
+        i_2 +=1
+    
+    buscador_1["info"] = buscador_2["info"]
+    buscador_2["info"] = info_a
+    
+    return my_list
+
+def sub_list(my_list,pos_i,num_elements):
+    
+    if pos_i < 0 or pos_i >= my_list["size"]:
+        return None
+    
+    buscador = my_list["first"]
+    i = 0
+    
+    while i < pos_i:
+        buscador = buscador["next"]
+        i +=1
+    
+    if pos_i + num_elements > my_list["size"]:
+        return None
+    
+    sub = new_list()
+    
+    for i in range(num_elements):
+        insert_element(sub,buscador["info"],i)
+        buscador = buscador["next"]
+    
+    return sub
+
+# implementacion funciones de ordenamiento 
+
+def default_sort_criteria(info_elm1,info_elm2):
+    is_sorted = False
+    if info_elm1 < info_elm2:
+        is_sorted = True
+    return is_sorted
+
+def selection_sort(my_list, sort_crit):
+    if my_list is None or my_list["size"] <= 1:
         return my_list
+
+    buscador_a = my_list["first"]
+
+    while buscador_a is not None:
+        min_max = buscador_a
+        buscador_b = buscador_a["next"]
+
+        while buscador_b is not None:
+            # usamos sort_crit para decidir si se actualiza
+            if sort_crit(buscador_b["info"], min_max["info"]):
+                min_max = buscador_b
+            buscador_b = buscador_b["next"]
+            
+        buscador_a["info"], min_max["info"] = min_max["info"], buscador_a["info"]
+        
+        
+        buscador_a = buscador_a["next"]
     
-    pivot = my_list[len(my_list) // 2]
-    left = [x for x in my_list if cmp_function(x, pivot)]
-    middle = [x for x in my_list if x == pivot]
-    right = [x for x in my_list if not cmp_function(x, pivot) and x != pivot]
+    return my_list
+            
+def insertion_sort(my_list,sort_crit):
     
-    return quick_sort(left, cmp_function) + middle + quick_sort(right, cmp_function)
+    
+    if my_list["first"] is None or my_list["first"]["next"] is None:
+        return  my_list # Lista vacía o de un solo elemento
+    
+    
+    ordenada = None
+    buscador = my_list["first"]
+    #hola
+    
+    while buscador is not None: # Recorremos todos los nodos de la lista
+        
+        buscador_b = buscador["next"]
+        
+        if ordenada is None or sort_crit(buscador["info"], ordenada["info"]):
+            # Insertar al inicio
+            buscador["next"] = ordenada
+            ordenada = buscador
+        else:
+            # Buscar posición correcta
+            temp = ordenada
+            while temp["next"] is not None and not sort_crit(buscador["info"], temp["next"]["info"]):
+                temp = temp["next"]
+
+            buscador["next"] = temp["next"]
+            temp["next"] = buscador
+          
+                
+        buscador = buscador_b #siguiente variable
+
+    my_list["first"] = ordenada
+    return my_list
+        
+
+def shell_sort(my_list, sort_crit):
+    """
+    Ordena una lista enlazada simple usando el algoritmo Shell Sort.
+
+    Parameters:
+    my_list (dict): Lista enlazada simple.
+    sort_crit (function): Función de comparación.
+
+    Returns:
+    dict: Lista ordenada.
+    """
+    n = my_list["size"]
+    if n <= 1:
+        return my_list
+
+    nodes = []
+    current = my_list["first"]
+    while current:
+        nodes.append(current)
+        current = current["next"]
+
+    # shell sort en array
+    gap = n // 2
+    while gap > 0:
+        for i in range(gap, n):
+            temp_info = nodes[i]["info"]
+            j = i
+            while j >= gap and sort_crit(temp_info, nodes[j - gap]["info"]):
+                nodes[j]["info"] = nodes[j - gap]["info"]
+                j -= gap
+            nodes[j]["info"] = temp_info
+        gap //= 2
+
+    return my_list
+
+def merge_sort(my_list, sort_crit=default_sort_criteria):
+#Listo Ambos 
+    if my_list["size"] <= 1:
+        return my_list
+
+    mid = my_list["size"] // 2
+    left = new_list()
+    right = new_list()
+    current = my_list["first"]
+    idx = 0
+    while current:
+        if idx < mid:
+            add_last(left, current["info"])
+        else:
+            add_last(right, current["info"])
+        current = current["next"]
+        idx += 1
+
+    left = merge_sort(left, sort_crit)
+    right = merge_sort(right, sort_crit)
+
+    result = new_list()
+    lnode = left["first"]
+    rnode = right["first"]
+    while lnode and rnode:
+        if sort_crit(lnode["info"], rnode["info"]):
+            add_last(result, lnode["info"])
+            lnode = lnode["next"]
+        else:
+            add_last(result, rnode["info"])
+            rnode = rnode["next"]
+    while lnode:
+        add_last(result, lnode["info"])
+        lnode = lnode["next"]
+    while rnode:
+        add_last(result, rnode["info"])
+        rnode = rnode["next"]
+
+    my_list["first"] = result["first"]
+    my_list["last"] = result["last"]
+    my_list["size"] = result["size"]
+
+    return my_list
+
+def quick_sort(my_list, sort_crit=default_sort_criteria):
+ 
+    if my_list["size"] <= 1:
+        return my_list
+
+  
+    pivot = my_list["first"]["info"]
+
+    left = new_list()
+    right = new_list()
+    current = my_list["first"]["next"]
+
+    while current:
+        if sort_crit(current["info"], pivot):
+            add_last(left, current["info"])
+        else:
+            add_last(right, current["info"])
+        current = current["next"]
+
+    left = quick_sort(left, sort_crit)
+    right = quick_sort(right, sort_crit)
+
+ 
+    result = new_list()
+    lnode = left["first"]
+    while lnode:
+        add_last(result, lnode["info"])
+        lnode = lnode["next"]
+
+    add_last(result, pivot)
+
+    rnode = right["first"]
+    while rnode:
+        add_last(result, rnode["info"])
+        rnode = rnode["next"]
+
+    my_list["first"] = result["first"]
+    my_list["last"] = result["last"]
+    my_list["size"] = result["size"]
+
+    return my_list

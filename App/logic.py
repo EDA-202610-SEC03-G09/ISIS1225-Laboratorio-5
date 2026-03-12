@@ -279,18 +279,16 @@ def count_books_by_tag(catalog, tag_name):
     return 0
 
 #  -------------------------------------------------------------
-# Funciones utilizadas para obtener el tamaño de las listas#  -------------------------------------------------------------
-
+# Funciones utilizadas para obtener el tamaño de las listas
+#  -------------------------------------------------------------
 
 def book_size(catalog):
  
     return data_structure.size(catalog["books"])
 
-
 def author_size(catalog):
  
     return data_structure.size(catalog["authors"])
-
 
 def tag_size(catalog):
   
@@ -355,10 +353,7 @@ def sort_books(catalog):
     
     start_time = get_time()
 
-
-
     if sort_algorithm == 1:
-    
         sorted_books_s = data_structure.selection_sort(sorted_books,eval_ratings)
 
     elif sort_algorithm == 2:
